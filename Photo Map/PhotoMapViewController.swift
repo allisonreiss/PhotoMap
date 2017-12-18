@@ -9,13 +9,15 @@
 import UIKit
 import MapKit
 
-class PhotoMapViewController: UIViewController, UIImagePickerControllerDelegate, UINavigationControllerDelegate, LocationsViewControllerDelegate {
+class PhotoMapViewController: UIViewController, UIImagePickerControllerDelegate, UINavigationControllerDelegate, LocationsViewControllerDelegate, MKMapViewDelegate {
 
-    private var imagePickerController: UIImagePickerController!
+ //   private var imagePickerController: UIImagePickerController!
     var postPic: UIImage!
     @IBOutlet weak var cameraButton: UIButton!
     @IBOutlet weak var mapView: MKMapView!
-    
+    var imagePicker: UIImagePickerController = UIImagePickerController()
+    var selectedLocation: String?
+ 
     override func viewDidLoad() {
         super.viewDidLoad()
 
@@ -27,15 +29,18 @@ class PhotoMapViewController: UIViewController, UIImagePickerControllerDelegate,
         cameraButton.layer.cornerRadius = 50
         cameraButton.clipsToBounds = true
         
-        self.imagePickerController = UIImagePickerController()
-        imagePickerController.delegate = self
-        imagePickerController.allowsEditing = true
-        imagePickerController.sourceType = UIImagePickerControllerSourceType.photoLibrary
+        mapView.delegate = self
+        
+        imagePicker.delegate = self
+        imagePicker.allowsEditing = true
+        imagePicker.sourceType = UIImagePickerControllerSourceType.photoLibrary
     }
     
     func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [String : Any]) {
         // Get the image captured by the UIImagePickerController
-        postPic = info[UIImagePickerControllerOriginalImage] as! UIImage
+        let original = info[UIImagePickerControllerOriginalImage] as! UIImage
+        
+        self.postPic = original
         
         // Dismiss UIImagePickerController to go back to your original view controller
         dismiss(animated: true, completion: nil)
@@ -45,7 +50,24 @@ class PhotoMapViewController: UIViewController, UIImagePickerControllerDelegate,
     
     @IBAction func onAddPhoto(_ sender: Any) {
         //show image picker
-        self.present(imagePickerController, animated: true, completion: nil)
+        self.present(imagePicker, animated: true, completion: nil)
+    }
+
+    func mapView(_ mapView: MKMapView, viewFor annotation: MKAnnotation) -> MKAnnotationView? {
+        let reuseID = "myAnnotationView"
+        
+        var annotationView = mapView.dequeueReusableAnnotationView(withIdentifier: reuseID)
+        
+        if (annotationView == nil) {
+            annotationView = MKPinAnnotationView(annotation: annotation, reuseIdentifier: reuseID)
+            annotationView!.canShowCallout = true
+            annotationView!.leftCalloutAccessoryView = UIImageView(frame: CGRect(x:0, y:0, width: 50, height:50))
+        }
+        
+        let imageView = annotationView?.leftCalloutAccessoryView as! UIImageView
+        imageView.image = postPic
+        
+        return annotationView
     }
     
     func locationsPickedLocation(controller: LocationsViewController, latitude: NSNumber, longitude: NSNumber) {
@@ -53,7 +75,7 @@ class PhotoMapViewController: UIViewController, UIImagePickerControllerDelegate,
         let annotation = MKPointAnnotation()
         annotation.coordinate = locationCoordinate
         annotation.title = String(describing: latitude)
-        mapView.addAnnotation(annotation)
+        self.mapView.addAnnotation(annotation)
     }
     
     override func didReceiveMemoryWarning() {
@@ -69,3 +91,4 @@ class PhotoMapViewController: UIViewController, UIImagePickerControllerDelegate,
         vc.delegate = self
     }
 }
+
