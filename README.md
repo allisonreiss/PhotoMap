@@ -2,16 +2,16 @@
 
 **PhotoMap** is an app that allows the user to search for locations using the [Foursquare API](https://developer.foursquare.com/docs) and create a pin with an image annotation.
 
-Time spent: **X** hours spent in total
+Time spent: **2.5** hours spent in total
 
 ## User Stories
 
 The following **required** user stories are complete:
 
-- [ ] Configure initial map view (+2pt)
-- [ ] User can take a photo (+1pt)
-- [ ] User can tag a location (+1pt)
-- [ ] User can drop a pin with image annotation (+2pt)
+- [X] Configure initial map view (+2pt)
+- [X] User can take a photo (+1pt)
+- [X] User can tag a location (+1pt)
+- [X] User can drop a pin with image annotation (+2pt)
 
 The following **additional** user stories are implemented:
 
@@ -29,13 +29,13 @@ Please list two areas of the assignment you'd like to **discuss further with you
 
 Here's a walkthrough of implemented user stories:
 
-<img src='http://i.imgur.com/link/to/your/gif/file.gif' title='Video Walkthrough' width='' alt='Video Walkthrough' />
+<img src='./PhotoMapWalkthrough.gif' title='Video Walkthrough' width='' alt='Video Walkthrough' />
 
 GIF created with [LiceCap](http://www.cockos.com/licecap/).
 
 ## Notes
 
-Describe any challenges encountered while building the app.
+I got stuck on getting the annotation to pop up because I hadn't set the MapView delegate and I couldn't figure out what I was doing wrong for a long time.
 
 ## License
 
